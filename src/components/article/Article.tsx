@@ -1,14 +1,36 @@
-import clsx from 'clsx';
-
 // Сообщаем вебпаку, что этот файл использует это изображение.
 import plane from 'src/images/plane.png';
 import { Text } from 'components/text';
 
 import styles from './Article.module.scss';
+import { useEffect } from 'react';
 
-export const Article = () => {
+type Props = {
+	isFormOpen: boolean;
+	setIsFormOpen: (isFormOpen: boolean) => void;
+};
+
+export const Article = ({ isFormOpen, setIsFormOpen }: Props) => {
+	useEffect(() => {
+		if (isFormOpen) {
+			document
+				.querySelector(`.${styles.article}`)
+				?.addEventListener('click', () => {
+					setIsFormOpen(false);
+				});
+		}
+
+		return () => {
+			document
+				.querySelector(`.${styles.article}`)
+				?.removeEventListener('click', () => {
+					setIsFormOpen(false);
+				});
+		};
+	}, [isFormOpen]);
+
 	return (
-		<article className={clsx(styles.article)}>
+		<article className={styles.article}>
 			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>

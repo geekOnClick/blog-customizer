@@ -14,34 +14,50 @@ import {
 	fontSizeOptions,
 	contentWidthArr,
 	OptionType,
+	defaultArticleState,
 } from 'src/constants/articleProps';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
 
 type Props = {
+	isFormOpen: boolean;
+	setIsFormOpen: (isFormOpen: boolean) => void;
 	applyPageChanges: (pageParams: Record<string, OptionType>) => void;
 };
 
-export const ArticleParamsForm = ({ applyPageChanges }: Props) => {
-	const [isFormOpen, setIsFormOpen] = useState(false);
+export const ArticleParamsForm = ({
+	applyPageChanges,
+	isFormOpen,
+	setIsFormOpen,
+}: Props) => {
 	const [isBtnReversed, setIsBtnReversed] = useState(false);
-	const [font, setFont] = useState(fontFamilyOptions[0]);
-	const [fontSize, setFontSize] = useState(fontSizeOptions[0]);
-	const [fontColor, setFontColor] = useState(fontColorsOptions[0]);
+	const [font, setFont] = useState(defaultArticleState.fontFamilyOption);
+	const [fontSize, setFontSize] = useState(defaultArticleState.fontSizeOption);
+	const [fontColor, setFontColor] = useState(defaultArticleState.fontColor);
 	const [backgroundColor, setBackgroundColor] = useState(
-		backgroundColorsOptions[0]
+		defaultArticleState.backgroundColor
 	);
-	const [contentWidth, setContentWidth] = useState(contentWidthArr[0]);
+	const [contentWidth, setContentWidth] = useState(
+		defaultArticleState.contentWidth
+	);
 
 	const reset = () => {
-		setFont(fontFamilyOptions[0]);
-		setFontSize(fontSizeOptions[0]);
-		setFontColor(fontColorsOptions[0]);
-		setBackgroundColor(backgroundColorsOptions[0]);
-		setContentWidth(contentWidthArr[0]);
+		setFont(defaultArticleState.fontFamilyOption);
+		setFontSize(defaultArticleState.fontSizeOption);
+		setFontColor(defaultArticleState.fontColor);
+		setBackgroundColor(defaultArticleState.backgroundColor);
+		setContentWidth(defaultArticleState.contentWidth);
+
+		applyPageChanges({
+			font: defaultArticleState.fontFamilyOption,
+			fontSize: defaultArticleState.fontSizeOption,
+			fontColor: defaultArticleState.fontColor,
+			backgroundColor: defaultArticleState.backgroundColor,
+			contentWidth: defaultArticleState.contentWidth,
+		});
 	};
 
-	const submit = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const submit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		applyPageChanges({
 			font,
@@ -60,10 +76,10 @@ export const ArticleParamsForm = ({ applyPageChanges }: Props) => {
 				isReversed={isFormOpen}
 			/>
 			<aside
-				className={
-					`${styles.container} ` + `${isFormOpen && styles.container_open}`
-				}>
-				<form className={styles.form}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isFormOpen,
+				})}>
+				<form className={styles.form} onSubmit={(e) => submit(e)}>
 					<Text as='h2' size={31} weight={800} uppercase family='open-sans'>
 						Задайте параметры
 					</Text>
@@ -113,11 +129,7 @@ export const ArticleParamsForm = ({ applyPageChanges }: Props) => {
 					</div>
 					<div className={clsx(styles.bottomContainer, styles.space)}>
 						<Button title='Сбросить' type='reset' onClick={reset} />
-						<Button
-							title='Применить'
-							type='submit'
-							onClick={(e) => submit(e)}
-						/>
+						<Button title='Применить' type='submit' />
 					</div>
 				</form>
 			</aside>
