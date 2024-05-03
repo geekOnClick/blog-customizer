@@ -4,6 +4,10 @@ import { ArrowButton } from './ArrowButton';
 
 const meta: Meta<typeof ArrowButton> = {
 	component: ArrowButton,
+	argTypes: {
+		handleBtnClick: { action: 'clicked' },
+		isReversed: { defaultValue: false },
+	},
 };
 
 export default meta;
@@ -13,7 +17,10 @@ export const ArrowButtonStory: Story = {
 	render: () => {
 		return (
 			<>
-				<ArrowButton />
+				<ArrowButton
+					isReversed={false}
+					handleBtnClick={() => console.log('Button clicked')}
+				/>
 			</>
 		);
 	},

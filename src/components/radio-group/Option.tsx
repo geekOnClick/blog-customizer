@@ -29,7 +29,6 @@ export const Option = (props: OptionProps) => {
 	return (
 		<div
 			className={styles.item}
-			key={value}
 			data-checked={isChecked}
 			data-testid={inputId}
 			tabIndex={0}
@@ -42,6 +41,7 @@ export const Option = (props: OptionProps) => {
 				value={value}
 				onChange={handleChange}
 				tabIndex={-1}
+				checked={isChecked}
 			/>
 			<label className={styles.label} htmlFor={inputId}>
 				<Text size={18} uppercase>
